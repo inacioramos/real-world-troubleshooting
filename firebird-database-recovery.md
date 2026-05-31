@@ -21,10 +21,13 @@ This technical case study details a critical infrastructure intervention to salv
 
 ## 🔍 Problem Description
 
-During standard operations, the client's commercial automation system experienced abrupt crashes, throwing unhandled memory allocation errors, specifically pointing to an **Access Violation** within the database layer. 
+During standard operations under high transactional load, the client's commercial automation system experienced abrupt crashes, throwing unhandled memory allocation errors and locking the database file handles.
 
-Initial diagnostics indicated structural corruption inside the Firebird database file (`.fdb`). The corruption prevented the system from reading specific index matrices and tables, threatening the entire transactional integrity of the business.
+Initially, any attempt to verify parameters or test connections triggered an OS-level file lock exception:
 
+![Facilite Database IO Lock Error](facilite-io-error.png)
+
+The system flagged that `FACILITE.FDB` was indefinitely trapped
 ---
 
 ## 👣 Steps Taken for Investigation & Diagnosis
@@ -40,7 +43,19 @@ To isolate the failure without risking further data degradation, the following s
 ## 📊 Discovered Results
 
 ### ❌ Actual Result (The Breakdown)
-The database structure was physically compromised. Standard software queries reaching the corrupted sectors caused the database engine driver to crash instantly, generating unhandled exceptions and preventing the client system from completing essential business workflows.
+The structural degradation of the database was severe. When using database administration suites like **IB Expert** and **IBOConsole** to force sweeps or backup pipelines, the engine crashed entirely due to structural page corruption.
+
+1. **Engine Consistency Check Failure:**
+
+![IB Expert Firebird Consistency Bugcheck](ibexpert-bugcheck.png)
+
+The database server triggers a low-level engine panic: `internal Firebird consistency check (can't continue after bugcheck)`.
+
+2. **Memory Exception upon Indexing:**
+   
+![IBOConsole Delphi Access Violation Exception](iboconsole-access-violation.png)
+
+While processing millions of rows inside transactional tables (such as `COMPLITCOMANDAPRODUTO`), the application hits a corrupted index pointer, forcing the operating system to throw a fatal memory read/write exception: `Access violation at address 772A12D8 in module 'ntdll.dll'`.
 
 ### ✅ Expected Result
 The database must maintain full transactional integrity (ACID properties), allowing applications to perform CRUD operations smoothly without encountering low-level page allocation failures.
