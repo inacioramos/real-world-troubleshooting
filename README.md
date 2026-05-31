@@ -12,7 +12,7 @@ Here you will find a curated list of production issues, technical breakdowns, an
 ---
 
 > [!NOTE]
-> 🇧🇷 **Contexto em Português:** Este repositório documenta um caso real de produção (restaurante em plena operação). Foi realizada a investigação de causa raiz para um erro de comunicação serial (`Exception EBadId` na `P05.DLL`), resolvido através do downgrade do driver do chip CH340 para restabelecer a operação da balança Toledo Prix 3 Fit.
+> 📝 **Contexto em Português:** Este repositório documenta um caso real de produção (restaurante em plena operação). Foi realizada a investigação de causa raiz para um erro de comunicação serial (`Exception EBadId` na `P05.DLL`), resolvido através do downgrade do driver do chip CH340 para restabelecer a operação da balança Toledo Prix 3 Fit.
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Resolved-success?style=for-the-badge" alt="Status Resolved">
