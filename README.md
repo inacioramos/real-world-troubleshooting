@@ -42,6 +42,9 @@ Following a preventive motherboard replacement on a checkout terminal, the **Eas
 The automation software fails to map and process streams from the serial port. When the user interacts with the terminal, the system raises a critical memory/identity exception: `Exception EBadId in module P05.DLL at 0006B1B9` 
 and flags a hardcoded "Erro!" message inside the weight field UI, preventing any telemetry data from being saved into the local ledger file (`C:\Sinco\Integrado\PESO.TXT`).
 
+<img src="assets/dll-exception.png" alt="Delphi P05.DLL Exception Error" width="500"/>
+<img src="assets/easylink-error.png" alt="Easylink UI Error State" width="500"/>
+
 ### ✅ Expected Result
 The POS software must transparently hook into the assigned serial COM port, complete the handshake protocol, and reliably capture data packets streamed by the Toledo hardware, regardless of physical infrastructure refactoring.
 
@@ -52,6 +55,7 @@ The POS software must transparently hook into the assigned serial COM port, comp
 The dynamic link library `P05.DLL` used by Easylink V. 2.2 expects a structured bitstream configuration back from the physical device. 
 
 Following a system refactor, Windows Update forcefully deployed the **WCH.CN USB-SERIAL CH340 Driver (Version 3.9.2024.9 / Date: 16/09/2024)**. This specific modern iteration changes the internal timing and data buffer processing for serial-to-USB handshakes, returning an unhandled hardware profile identifier that crashes the underlying Delphi application layer.
+<img src="assets/driver-properties.png" alt="Windows Device Manager CH340 Driver Properties" width="400"/>
 
 ---
 
