@@ -66,6 +66,7 @@ The POS software must transparently hook into the assigned serial COM port, comp
 The dynamic link library `P05.DLL` used by Easylink V. 2.2 expects a structured bitstream configuration back from the physical device. 
 
 Following a system refactor, Windows Update forcefully deployed the **WCH.CN USB-SERIAL CH340 Driver (Version 3.9.2024.9 / Date: 16/09/2024)**. This specific modern iteration changes the internal timing and data buffer processing for serial-to-USB handshakes, returning an unhandled hardware profile identifier that crashes the underlying Delphi application layer.
+
 ![Windows Device Manager CH340 Driver Properties](driver-properties.png)
 
 ---
