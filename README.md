@@ -1,4 +1,15 @@
 # Case Study: Real-World Bug Resolution & Root Cause Analysis (RCA)
+## 📂 Case Studies Index (Índice de Casos)
+
+Here you will find a curated list of production issues, technical breakdowns, and infrastructure recoveries documented with full root cause analysis (RCA).
+
+| Case ID | Technical Title | Core Technology | Severity | Documentation Link |
+| :--- | :--- | :--- | :--- | :--- |
+| **#001** | POS Integration & Handshake Bug | Windows Serial / CH340 / DLL | High 🔴 | [View Case Study](README.md) |
+| **#002** | Production Database Corruption Recovery | Firebird SQL / Gfix / Gbak | Critical 🚨 | [View Case Study](firebird-database-recovery.md) |
+| **#003** | System Migration & Extended Network Errors | Windows 11 / Network Mapping | Medium 🟡 | *Coming Soon* |
+
+---
 
 > [!NOTE]
 > 🇧🇷 **Contexto em Português:** Este repositório documenta um caso real de produção (restaurante em plena operação). Foi realizada a investigação de causa raiz para um erro de comunicação serial (`Exception EBadId` na `P05.DLL`), resolvido através do downgrade do driver do chip CH340 para restabelecer a operação da balança Toledo Prix 3 Fit.
