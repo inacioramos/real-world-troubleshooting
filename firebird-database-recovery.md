@@ -47,7 +47,7 @@ The structural degradation of the database was severe. When using database admin
 
 1. **Engine Consistency Check Failure:**
 
-![IB Expert Firebird Consistency Bugcheck](ibexpert-bugcheck.png)
+![IB Expert Firebird Consistency Bugcheck](ibexpert1-bugcheck.png)
 
 The database server triggers a low-level engine panic: `internal Firebird consistency check (can't continue after bugcheck)`.
 
@@ -70,9 +70,10 @@ The *Access Violation* errors were triggered because the internal database point
 
 ## 🛠️ Recovery & Resolution Applied
 
-A multi-stage disaster recovery pipeline was deployed using low-level Firebird command-line utilities:
+A multi-stage disaster recovery pipeline was deployed using low-level Firebird command-line utilities to isolate corrupt fragments and rebuild the core architecture directly on the staging environment:
 
-1. **Database Repair (`gfix`):** Commanded the engine to mark and isolate the damaged fragments, sweeping the file to clear corrupt transaction threads:
+### 1. Corruption Mapping & Database Repair (`gfix`)
+First, the engine was forced to inspect the file headers, targeting internal pages. The utility exposed a severe physical checksum failure on a specific block:
+
 ```bash
-   gfix -v -f corrupted_database.fdb
-   gfix -m -i corrupted_database.fdb
+gfix -m -user SYSDBA -pass masterkey "C:\Sinco\BackupAtualizacoes\BD\FACILITE.FDB"
