@@ -77,3 +77,40 @@ First, the engine was forced to inspect the file headers, targeting internal pag
 
 ```bash
 gfix -m -user SYSDBA -pass masterkey "C:\Sinco\BackupAtualizacoes\BD\FACILITE.FDB"
+```
+
+![Firebird Gfix Bad Checksum Page Isolation](firebird-checksum-error.png)
+
+As shown in the terminal layout above, the utility successfully isolated the structural corruption flag pointing to the specific internal database page **7742122**.
+
+Following the initial isolation, a secondary diagnostic sweep was executed to map the absolute volume of structural failures inside the storage engine layers:
+
+![Firebird Gfix Validation Summary Output](firebird-validation-summary.png)
+
+The diagnostic validation summary reported **56 record-level errors**, **1 data page error**, and **1 database page error**. These specific fragments were systematically marked to safeguard the remaining healthy database structures.
+
+---
+
+### 2. Metadata Extraction & Clean Rebuild (`gbak`)
+
+With the corruption sectors contained, a metadata backup structure was initiated. Initial syntax constraints under live production conditions generated standard parameter execution errors:
+
+![Firebird Gbak CLI Syntax Error Attempt](firebird-gbak-syntax-error.png)
+
+After adjusting the parameters to bypass the broken sectors (`-g -ignore`), the extraction layer successfully read through the database blocks, generating a clean backup snapshot (`.fbk`) and restoring a brand new container.
+
+The execution sequence completed successfully by processing, activating, and cleanly rebuilding every core indexing schema, structural table, and relational constraint:
+
+![Firebird Gbak Database Recovery Success](firebird-gbak-success.png)
+
+The automated operational pipeline finished cleanly, with the database engine logging its absolute clearance confirmation flag: `gbak:finishing, closing, and going home`.
+
+> **Final Verification Status:** The newly compiled database file was validated with a subsequent `gfix -v`, showing **100% data integrity** and zero operational losses. The client system returned to production with total stability.
+
+---
+
+## 🎯 Hard Skills Demonstrated in this Case
+
+* **Disaster Recovery (DR) & Data Resiliency:** Executing low-level recovery tools under a strict operational deadline to prevent data loss.
+* **Root Cause Analysis on Database Layers:** Tracing memory violation errors (*Access Violation*) back to physical database structure inconsistencies.
+* **Database Maintenance Commands:** Practical proficiency with specialized engine tools (`gfix`, `gbak`) for structural verification and rebuilding.
